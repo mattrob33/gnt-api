@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
+	"gnt-api/api"
 	"os"
 )
 
@@ -17,8 +18,9 @@ func setupRouter() *gin.Engine {
 
 	router.GET("/", home)
 
-	router.GET("/api/verse", verse)
-	router.GET("/api/verses", verses)
+	router.GET("/api/verse", api.Verse)
+	router.GET("/api/verses", api.Verses)
+	router.GET("/api/query", api.Query)
 
 	return router
 }
