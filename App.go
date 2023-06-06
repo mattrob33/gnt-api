@@ -18,6 +18,7 @@ func setupRouter() *gin.Engine {
 	router.GET("/", home)
 
 	router.GET("/api/verse", verse)
+	router.GET("/api/verses", verses)
 
 	return router
 }
