@@ -1,0 +1,34 @@
+<html>
+    <head>
+         <meta name="viewport" content="width=device-width, initial-scale=1">
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+         <style>
+            h1 {
+                font-size: 14pt;
+            }
+
+            a {
+                color: black;
+            }
+
+            a:hover {
+                color: black;
+            }
+         </style>
+     </head>
+    <body>
+        <div class="container mt-4">
+            <h1>{{len .Verses }} results</h1>
+            <br>
+            {{range .Verses}}
+                <h1>{{index $.BookTitles .Book }} {{ .Chapter }}:{{ .Verse }}</h1>
+                <p>
+                    {{range .Words }}
+                        <a href="/verses?lemma={{.Lemma}}&pos={{.PartOfSpeech}}&tense={{.Tense}}&mood={{.Mood}}&voice={{.Voice}}&person={{.Person}}&case={{.Case}}&number={{.Number}}&gender={{.Gender}}">{{.Text}}</a>&nbsp;
+                    {{end}}
+                </p>
+                <br>
+            {{end}}
+        </div>
+    </body>
+</html>

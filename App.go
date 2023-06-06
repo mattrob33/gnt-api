@@ -15,8 +15,10 @@ func main() {
 
 func setupRouter() *gin.Engine {
 	router := gin.Default()
+	router.LoadHTMLFiles("./templates/verses.tmpl")
 
 	router.GET("/", home)
+	router.GET("/verses", verses)
 
 	router.GET("/api/verse", api.Verse)
 	router.GET("/api/verses", api.Verses)
