@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gnt-api/gnt"
 	"net/http"
@@ -8,9 +9,9 @@ import (
 )
 
 func verse(c *gin.Context) {
-	book, _ := strconv.Atoi(c.Query("book"))
-	chapter, _ := strconv.Atoi(c.Query("chapter"))
-	verseNum, _ := strconv.Atoi(c.Query("verse"))
+	book := requireParamInt(c, "book")
+	chapter := requireParamInt(c, "chapter")
+	verseNum := requireParamInt(c, "verse")
 
 	verse := gnt.GetVerse(book, chapter, verseNum)
 
@@ -18,10 +19,10 @@ func verse(c *gin.Context) {
 }
 
 func verses(c *gin.Context) {
-	book, _ := strconv.Atoi(c.Query("book"))
-	chapter, _ := strconv.Atoi(c.Query("chapter"))
-	startVerse, _ := strconv.Atoi(c.Query("start_verse"))
-	endVerse, _ := strconv.Atoi(c.Query("end_verse"))
+	book := requireParamInt(c, "book")
+	chapter := requireParamInt(c, "chapter")
+	startVerse := requireParamInt(c, "start_verse")
+	endVerse := requireParamInt(c, "end_verse")
 
 	var verses []gnt.Verse
 
@@ -31,4 +32,12 @@ func verses(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, verses)
+}
+
+func requireParamInt(c *gin.Context, param string) int {
+	value, err := strconv.Atoi(c.Query(param))
+	if err != nil {
+		c.String(http.StatusBadRequest, fmt.Sprintf("Missing query param `%s`", param))
+	}
+	return value
 }
