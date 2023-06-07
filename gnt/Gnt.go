@@ -46,7 +46,7 @@ func SendQuery(query Query) []Verse {
 
 	subQuery := query.ToSql()
 
-	sqlQuery := fmt.Sprintf("SELECT * FROM text WHERE (book, chapter, verse) IN (%s)", subQuery)
+	sqlQuery := fmt.Sprintf("SELECT * FROM text JOIN glosses ON text.lemma=glosses.lex WHERE (book, chapter, verse) IN (%s)", subQuery)
 
 	rows, err := db.Query(sqlQuery)
 	defer rows.Close()
@@ -61,7 +61,7 @@ func SendQuery(query Query) []Verse {
 		var wordNum int
 		var word Word
 
-		err = rows.Scan(&ref.Book, &ref.Chapter, &ref.Verse, &wordNum, &word.Text, &word.Lemma, &word.PartOfSpeech, &word.Person, &word.Tense, &word.Voice, &word.Mood, &word.Case, &word.Number, &word.Gender)
+		err = rows.Scan(&ref.Book, &ref.Chapter, &ref.Verse, &wordNum, &word.Text, &word.Lemma, &word.PartOfSpeech, &word.Person, &word.Tense, &word.Voice, &word.Mood, &word.Case, &word.Number, &word.Gender, &word.Lemma, &word.Gloss, &word.Occ)
 
 		if (ref != prevRef) && (prevRef.Chapter != 0) {
 			verses = append(verses, Verse{

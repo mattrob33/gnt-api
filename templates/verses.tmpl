@@ -37,7 +37,7 @@
          <script>
              function showDialog(item) {
                 document.getElementById("detailsTitle").innerHTML = item.Lemma;
-                document.getElementById("detailsInfo").innerHTML = item.PartOfSpeech+item.Tense+item.Mood+item.Voice+item.Person+item.Case+item.Number+item.Gender;
+                document.getElementById("detailsInfo").innerHTML = item.Gloss+"<br>"+item.Occ+"x<br>["+item.PartOfSpeech+item.Tense+item.Mood+item.Voice+item.Person+item.Case+item.Number+item.Gender+"]";
 
                 document.getElementById("detailsLemma").href = "/verses?lemma="+item.Lemma;
                 document.getElementById("detailsExact").href = "/verses?lemma="+item.Lemma+"&pos="+item.PartOfSpeech+"&tense="+item.Tense+"&mood="+item.Mood+"&voice="+item.Voice+"&person="+item.Person+"&case="+item.Case+"&number="+item.Number+"&gender="+item.Gender;

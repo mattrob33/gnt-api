@@ -11,4 +11,6 @@ type Word struct {
 	Case         string
 	Number       string
 	Gender       string
+	Gloss        string
+	Occ          int
 }
