@@ -14,7 +14,42 @@
             a:hover {
                 color: black;
             }
+
+            dialog {
+                display: none;
+            }
+
+            dialog[open] {
+                width: 100%;
+                height: 200px;
+                display: block;
+                position: fixed;
+                bottom: 0;
+            }
+
+            .detailsButton {
+                background: gray;
+                border: 2px solid black;
+                padding: 4px 8px;
+            }
          </style>
+
+         <script>
+             function showDialog(item) {
+                document.getElementById("detailsTitle").innerHTML = item.Lemma;
+                document.getElementById("detailsInfo").innerHTML = item.PartOfSpeech+item.Tense+item.Mood+item.Voice+item.Person+item.Case+item.Number+item.Gender;
+
+                document.getElementById("detailsLemma").href = "/verses?lemma="+item.Lemma;
+                document.getElementById("detailsExact").href = "/verses?lemma="+item.Lemma+"&pos="+item.PartOfSpeech+"&tense="+item.Tense+"&mood="+item.Mood+"&voice="+item.Voice+"&person="+item.Person+"&case="+item.Case+"&number="+item.Number+"&gender="+item.Gender;
+                document.getElementById("detailsMorph").href = "/verses?pos="+item.PartOfSpeech+"&tense="+item.Tense+"&mood="+item.Mood+"&voice="+item.Voice+"&person="+item.Person+"&case="+item.Case+"&number="+item.Number+"&gender="+item.Gender;
+
+                document.getElementById("details").setAttribute("open", "");
+             }
+
+             function hideDialog() {
+                document.getElementById("details").removeAttribute("open");
+            }
+         </script>
      </head>
     <body>
         <div class="container mt-4">
@@ -24,11 +59,23 @@
                 <h1>{{index $.BookTitles .Book }} {{ .Chapter }}:{{ .Verse }}</h1>
                 <p>
                     {{range .Words }}
-                        <a href="/verses?lemma={{.Lemma}}&pos={{.PartOfSpeech}}&tense={{.Tense}}&mood={{.Mood}}&voice={{.Voice}}&person={{.Person}}&case={{.Case}}&number={{.Number}}&gender={{.Gender}}">{{.Text}}</a>&nbsp;
+                        <span onclick="showDialog({{.}})">{{.Text}}&nbsp;</span>
                     {{end}}
                 </p>
                 <br>
             {{end}}
         </div>
+
+        <dialog id="details">
+            <form>
+                <h1 id="detailsTitle"></h1>
+                <p id="detailsInfo"></p>
+                <div>
+                  <a class="detailsButton" id="detailsLemma" href="">Lemma</a>
+                  <a class="detailsButton" id="detailsExact" href="">Exact</a>
+                  <a class="detailsButton" id="detailsMorph" href="">Morph</a>
+                </div>
+            </form>
+        </dialog>
     </body>
 </html>
