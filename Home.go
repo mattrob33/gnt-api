@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"gnt-api/api"
 	"gnt-api/gnt"
 	"net/http"
 )
@@ -17,7 +18,48 @@ func home(c *gin.Context) {
 	c.String(http.StatusOK, output)
 }
 
-func verses(c *gin.Context) {
+func read(c *gin.Context) {
+	book := api.RequireParamInt(c, "book")
+	chapter := api.RequireParamInt(c, "chapter")
+	verses := gnt.GetChapter(book, chapter)
+
+	bookTitles := []string{
+		"Matt",
+		"Mark",
+		"Luke",
+		"John",
+		"Acts",
+		"Rom",
+		"1 Cor",
+		"2 Cor",
+		"Gal",
+		"Eph",
+		"Phil",
+		"Col",
+		"1 Thess",
+		"2 Thess",
+		"1 Tim",
+		"2 Tim",
+		"Titus",
+		"Phlm",
+		"Heb",
+		"James",
+		"1 Pet",
+		"2 Pet",
+		"1 John",
+		"2 John",
+		"3 John",
+		"Jude",
+		"Rev",
+	}
+
+	c.HTML(http.StatusOK, "verses.tmpl", gin.H{
+		"Verses":     verses,
+		"BookTitles": bookTitles,
+	})
+}
+
+func wordsearch(c *gin.Context) {
 	query := gnt.Query{
 		Lemma:        c.Query("lemma"),
 		PartOfSpeech: c.Query("pos"),
@@ -62,7 +104,7 @@ func verses(c *gin.Context) {
 		"Rev",
 	}
 
-	c.HTML(http.StatusOK, "verses.tmpl", gin.H{
+	c.HTML(http.StatusOK, "wordsearch.tmpl", gin.H{
 		"Verses":     verses,
 		"BookTitles": bookTitles,
 	})

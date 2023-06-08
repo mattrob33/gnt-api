@@ -7,9 +7,9 @@ import (
 )
 
 func Verse(c *gin.Context) {
-	book := requireParamInt(c, "book")
-	chapter := requireParamInt(c, "chapter")
-	verseNum := requireParamInt(c, "verse")
+	book := RequireParamInt(c, "book")
+	chapter := RequireParamInt(c, "chapter")
+	verseNum := RequireParamInt(c, "verse")
 
 	verse := gnt.GetVerse(book, chapter, verseNum)
 
@@ -17,10 +17,10 @@ func Verse(c *gin.Context) {
 }
 
 func Verses(c *gin.Context) {
-	book := requireParamInt(c, "book")
-	chapter := requireParamInt(c, "chapter")
-	startVerse := requireParamInt(c, "start_verse")
-	endVerse := requireParamInt(c, "end_verse")
+	book := RequireParamInt(c, "book")
+	chapter := RequireParamInt(c, "chapter")
+	startVerse := RequireParamInt(c, "start_verse")
+	endVerse := RequireParamInt(c, "end_verse")
 
 	var verses []gnt.Verse
 

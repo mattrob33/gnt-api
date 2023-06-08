@@ -53,18 +53,17 @@
      </head>
     <body>
         <div class="container mt-4">
-            <p>
-                {{range $n, $verse := .Verses}}
-                    {{ if eq $n 0 }}
-                        <h1>{{index $.BookTitles .Book }} {{ .Chapter }}</h1>
-                    {{ end }}
-
-                    <sup>{{ .Verse }}</sup>
+            <h1>{{len .Verses }} results</h1>
+            <br>
+            {{range .Verses}}
+                <h1><a href="/read?book={{.Book}}&chapter={{.Chapter}}">{{index $.BookTitles .Book }} {{ .Chapter }}:{{ .Verse }}</a></h1>
+                <p>
                     {{range .Words }}
                         <span onclick="showDialog({{.}})">{{.Text}}&nbsp;</span>
                     {{end}}
-                {{end}}
-            </p>
+                </p>
+                <br>
+            {{end}}
         </div>
 
         <dialog id="details">

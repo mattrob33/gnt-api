@@ -37,6 +37,54 @@ func GetVerse(book, chapter, verseNum int) Verse {
 	}
 }
 
+func GetChapter(book, chapter int) []Verse {
+	db, err := sql.Open("sqlite3", "./gnt.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	sqlQuery := fmt.Sprintf("SELECT * FROM text JOIN glosses ON text.lemma=glosses.lex WHERE book='%d' AND chapter='%d'", book, chapter)
+
+	rows, err := db.Query(sqlQuery)
+	defer rows.Close()
+
+	var verses []Verse
+	var words []Word
+
+	var prevRef bibleref.BibleRef
+
+	for rows.Next() {
+		var ref bibleref.BibleRef
+		var wordNum int
+		var word Word
+
+		err = rows.Scan(&ref.Book, &ref.Chapter, &ref.Verse, &wordNum, &word.Text, &word.Lemma, &word.PartOfSpeech, &word.Person, &word.Tense, &word.Voice, &word.Mood, &word.Case, &word.Number, &word.Gender, &word.Lemma, &word.Gloss, &word.Occ)
+
+		if (ref != prevRef) && (prevRef.Chapter != 0) {
+			verses = append(verses, Verse{
+				Book:    prevRef.Book,
+				Chapter: prevRef.Chapter,
+				Verse:   prevRef.Verse,
+				Words:   words,
+			})
+			words = nil
+		}
+
+		words = append(words, word)
+		prevRef = ref
+	}
+
+	verses = append(verses, Verse{
+		Book:    prevRef.Book,
+		Chapter: prevRef.Chapter,
+		Verse:   prevRef.Verse,
+		Words:   words,
+	})
+
+	return verses
+}
+
 func SendQuery(query Query) []Verse {
 	db, err := sql.Open("sqlite3", "./gnt.db")
 	if err != nil {
