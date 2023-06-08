@@ -1,26 +1,27 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"gnt-api/api"
 	"gnt-api/gnt"
 	"net/http"
+	"strconv"
 )
 
 func home(c *gin.Context) {
-	var output string
-	for i := 1; i <= 18; i++ {
-		verse := gnt.GetVerse(3, 1, i)
-		output += fmt.Sprintf("[%d] %s\n", i, verse.PlainText())
-	}
-
-	c.String(http.StatusOK, output)
+	c.Redirect(http.StatusTemporaryRedirect, "/read")
 }
 
 func read(c *gin.Context) {
-	book := api.RequireParamInt(c, "book")
-	chapter := api.RequireParamInt(c, "chapter")
+	book, err := strconv.Atoi(c.Query("book"))
+	if err != nil {
+		book = 0
+	}
+
+	chapter, err := strconv.Atoi(c.Query("chapter"))
+	if err != nil {
+		chapter = 1
+	}
+
 	verses := gnt.GetChapter(book, chapter)
 
 	bookTitles := []string{
